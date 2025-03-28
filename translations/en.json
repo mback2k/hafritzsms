@@ -1,0 +1,44 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "host": "Host",
+                    "password": "Password",
+                    "username": "Username",
+                    "token": "Authenticator Token (TOTP Secret)"
+                }
+            }
+        }
+    },
+    "config_subentries": {
+        "target": {
+            "step": {
+                "user": {
+                    "title": "Add target",
+                    "description": "Add SMS recipient",
+                    "data": {
+                        "name": "Target name",
+                        "target": "Target number"
+                    }
+                },
+                "reconfigure": {
+                    "title": "Update target",
+                    "description": "Update SMS recipient"
+                }
+            },
+            "error": {
+                "impossible_number": "The target number is not a possible phone number"
+            },
+            "abort": {}
+        }
+    }
+}

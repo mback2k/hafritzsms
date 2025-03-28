@@ -1,0 +1,45 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]",
+          "username": "[%key:common::config_flow::data::username%]",
+          "password": "[%key:common::config_flow::data::password%]",
+          "token": "Authenticator Token (TOTP Secret)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    }
+  },
+  "config_subentries": {
+    "target": {
+      "step": {
+        "user": {
+          "title": "Add target",
+          "description": "Add SMS recipient",
+          "data": {
+            "name": "Target name",
+            "target": "Target number"
+          }
+        },
+        "reconfigure": {
+          "title": "Update target",
+          "description": "Update SMS recipient"
+        }
+      },
+      "error": {
+        "impossible_number": "The target number is not a possible phone number"
+      },
+      "abort": {
+      }
+    }
+  }
+}
