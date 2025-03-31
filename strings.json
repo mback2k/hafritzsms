@@ -2,11 +2,15 @@
   "config": {
     "step": {
       "user": {
+        "description": "Please enter the credentials for your AVM FRITZ!Box.",
         "data": {
           "host": "[%key:common::config_flow::data::host%]",
           "username": "[%key:common::config_flow::data::username%]",
           "password": "[%key:common::config_flow::data::password%]",
           "token": "Authenticator Token (TOTP Secret)"
+        },
+        "data_description": {
+          "token": "Generated TOTP: {code}"
         }
       }
     },

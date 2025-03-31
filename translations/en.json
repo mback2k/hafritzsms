@@ -10,11 +10,15 @@
         },
         "step": {
             "user": {
+                "description": "Please enter the credentials for your AVM FRITZ!Bo.",
                 "data": {
                     "host": "Host",
                     "password": "Password",
                     "username": "Username",
                     "token": "Authenticator Token (TOTP Secret)"
+                },
+                "data_description": {
+                    "token": "Generated TOTP: {code}"
                 }
             }
         }

@@ -6,10 +6,10 @@ import logging
 from typing import Any
 
 import aiohttp
+from fritzsms.fritzbox import FritzBox
 import phonenumbers
 import voluptuous as vol
 
-from fritzsms.fritzbox import FritzBox
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
@@ -59,24 +59,36 @@ class FritzBoxConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
+        code = ""
         if user_input is not None:
-            host = user_input[CONF_HOST]
+            user_input[CONF_TOKEN] = user_input[CONF_TOKEN].replace(" ", "")
             session = async_get_clientsession(self.hass)
-            box = FritzBox(host, session)
+            box = FritzBox(user_input[CONF_HOST], session)
             box.set_otp(user_input[CONF_TOKEN])
+            code = box.get_otp()
             try:
                 await box.login(user_input[CONF_USERNAME], user_input[CONF_PASSWORD])
+                otp_configured = await box.is_otp_configured()
                 await box.logout()
+                if not otp_configured:
+                    errors[CONF_TOKEN] = "invalid_auth"
+                else:
+                    return self.async_create_entry(title=user_input[CONF_HOST], data=user_input)
             except aiohttp.client_exceptions.ClientConnectorError:
-                errors["base"] = "cannot_connect"
+                errors[CONF_HOST] = "cannot_connect"
             except RuntimeError:
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
-            else:
-                return self.async_create_entry(title=host, data=user_input)
+
+            data_schema = self.add_suggested_values_to_schema(
+                STEP_USER_DATA_SCHEMA, user_input
+            )
+        else:
+            data_schema = STEP_USER_DATA_SCHEMA
 
         return self.async_show_form(
-            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+            step_id="user", data_schema=data_schema, errors=errors,
+            description_placeholders={"code": code}
         )
 
 
