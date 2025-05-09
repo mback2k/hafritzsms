@@ -6,11 +6,13 @@ import logging
 
 from homeassistant.components.notify import NotifyEntity
 from homeassistant.config_entries import ConfigSubentry
-from homeassistant.const import CONF_PASSWORD, CONF_TARGET, CONF_USERNAME
+from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_TARGET, CONF_USERNAME
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from . import FritzBoxConfigEntry
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,15 +23,13 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up the SMS notification targets from a config entry."""
-    """At the moment NotifyEntity doesn't seem to support device_info:
     device_registry = dr.async_get(hass)
     device_registry.async_get_or_create(
         config_entry_id=config_entry.entry_id,
         identifiers={(DOMAIN, config_entry.entry_id)},
         name=config_entry.title,
-        configuration_url=f"http://{config_entry.data[CONF_HOST]}/"
+        configuration_url=f"http://{config_entry.data[CONF_HOST]}/",
     )
-    """
     for subentry_id, subentry in config_entry.subentries.items():
         async_add_entities(
             [
@@ -53,14 +53,12 @@ class FritzBoxNotifyEntity(NotifyEntity):
         self.entry = entry
         self.subentry = subentry
         self._attr_name = subentry.title
-        self._attr_unique_id = subentry.unique_id
-        """At the moment NotifyEntity doesn't seem to support device_info:
-        self._attr_device_info = DeviceInfo(
+        self._attr_unique_id = subentry.subentry_id
+        self._attr_device_info = dr.DeviceInfo(
             identifiers={(DOMAIN, subentry.subentry_id)},
             name=subentry.title,
             via_device=(DOMAIN, entry.entry_id),
         )
-        """
 
     async def async_send_message(self, message: str, title: str | None = None) -> None:
         """Send SMS to specified target user cell."""
