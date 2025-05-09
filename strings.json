@@ -46,6 +46,9 @@
       "error": {
         "impossible_number": "The target number is not a possible phone number"
       },
+      "abort": {
+        "reconfigure_successful": "Update of target was successful"
+      },
       "initiate_flow": {
         "user": "Add SMS target",
         "reconfigure": "Update SMS target"

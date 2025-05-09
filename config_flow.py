@@ -130,11 +130,8 @@ class TargetSubentryFlowHandler(ConfigSubentryFlow):
         self, user_input: dict[str, Any] | None = None
     ) -> SubentryFlowResult:
         """User flow to modify an existing target."""
+        config_entry = self._get_entry()
         config_subentry = self._get_reconfigure_subentry()
-
-        if config_subentry is None:
-            return self.async_abort(reason="not_found")
-
         errors: dict[str, str] = {}
         if user_input is not None:
             name = user_input[CONF_NAME]
@@ -145,7 +142,10 @@ class TargetSubentryFlowHandler(ConfigSubentryFlow):
                 errors[CONF_TARGET] = "impossible_number"
             else:
                 return self.async_update_and_abort(
-                    config_subentry, title=name, data_updates=user_input
+                    entry=config_entry,
+                    subentry=config_subentry,
+                    title=name,
+                    data_updates=user_input,
                 )
 
             data_schema = self.add_suggested_values_to_schema(
