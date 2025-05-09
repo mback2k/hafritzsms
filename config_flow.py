@@ -125,3 +125,37 @@ class TargetSubentryFlowHandler(ConfigSubentryFlow):
         return self.async_show_form(
             step_id="user", data_schema=STEP_TARGET_DATA_SCHEMA, errors=errors
         )
+
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> SubentryFlowResult:
+        """User flow to modify an existing target."""
+        config_subentry = self._get_reconfigure_subentry()
+
+        if config_subentry is None:
+            return self.async_abort(reason="not_found")
+
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            name = user_input[CONF_NAME]
+            target = user_input[CONF_TARGET]
+            try:
+                phonenumbers.parse(target)
+            except phonenumbers.NumberParseException:
+                errors[CONF_TARGET] = "impossible_number"
+            else:
+                return self.async_update_and_abort(
+                    config_subentry, title=name, data_updates=user_input
+                )
+
+            data_schema = self.add_suggested_values_to_schema(
+                STEP_TARGET_DATA_SCHEMA, user_input
+            )
+        else:
+            data_schema = self.add_suggested_values_to_schema(
+                STEP_TARGET_DATA_SCHEMA, config_subentry.data
+            )
+
+        return self.async_show_form(
+            step_id="reconfigure", data_schema=data_schema, errors=errors
+        )

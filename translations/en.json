@@ -36,13 +36,21 @@
                 },
                 "reconfigure": {
                     "title": "Update target",
-                    "description": "Update SMS recipient"
+                    "description": "Update SMS recipient",
+                    "data": {
+                        "name": "Target name",
+                        "target": "Target number"
+                    }
                 }
             },
             "error": {
                 "impossible_number": "The target number is not a possible phone number"
             },
-            "abort": {}
+            "initiate_flow": {
+                "user": "Add SMS target",
+                "reconfigure": "Update SMS target"
+            },
+            "entry_type": "SMS target"
         }
     }
 }
