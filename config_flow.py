@@ -73,7 +73,9 @@ class FritzBoxConfigFlow(ConfigFlow, domain=DOMAIN):
                 if not otp_configured:
                     errors[CONF_TOKEN] = "invalid_auth"
                 else:
-                    return self.async_create_entry(title=user_input[CONF_HOST], data=user_input)
+                    return self.async_create_entry(
+                        title=user_input[CONF_HOST], data=user_input
+                    )
             except aiohttp.client_exceptions.ClientConnectorError:
                 errors[CONF_HOST] = "cannot_connect"
             except RuntimeError:
@@ -87,10 +89,11 @@ class FritzBoxConfigFlow(ConfigFlow, domain=DOMAIN):
             data_schema = STEP_USER_DATA_SCHEMA
 
         return self.async_show_form(
-            step_id="user", data_schema=data_schema, errors=errors,
-            description_placeholders={"code": code}
+            step_id="user",
+            data_schema=data_schema,
+            errors=errors,
+            description_placeholders={"code": code},
         )
-
 
     @classmethod
     @callback
@@ -99,7 +102,6 @@ class FritzBoxConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> dict[str, type[ConfigSubentryFlow]]:
         """Return subentries supported by this integration."""
         return {"target": TargetSubentryFlowHandler}
-
 
 
 class TargetSubentryFlowHandler(ConfigSubentryFlow):

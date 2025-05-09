@@ -41,6 +41,7 @@ async def async_setup_entry(
             config_subentry_id=subentry_id,
         )
 
+
 class FritzBoxNotifyEntity(NotifyEntity):
     """Implement the notification service for the AVM FRITZ!Box SMS service."""
 
