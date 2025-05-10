@@ -9,8 +9,8 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/mback2k/hafritzsms/issues",
   "requirements": [
-    "pyfritzsms==0.1.3",
+    "pyfritzsms==0.1.4",
     "phonenumberslite==9.0.5"
   ],
-  "version": "0.2.0"
+  "version": "0.2.1"
 }
